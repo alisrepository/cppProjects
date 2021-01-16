@@ -1,0 +1,204 @@
+using namespace std;
+#include <iostream>
+
+struct Node {
+	int data;
+	Node* next;
+};
+
+class SingleLinked_list {
+private:
+	Node* head, * tail;
+	int size = 0;
+public:
+
+	int getSize() { return size; }
+
+	SingleLinked_list() {
+		head = NULL;
+		tail = NULL;
+	}
+
+	inline Node* createNode() {
+		Node* node = new Node();
+		return node;
+	}
+
+	void addToHead(const int& val) {
+		Node* node = createNode();
+		node->data = val;
+		node->next = NULL;
+		if (head == NULL) {
+			head = tail = node;
+			size++;
+		}
+		else
+		{
+			head->next = node;
+			head = node;
+			node->next = NULL;
+			size++;
+		}
+	}
+
+	void addToTail(const int& val) {
+		Node* node = createNode();
+		node->data = val;
+		if (tail == NULL)
+		{
+			head = tail = node;
+			node->next = NULL;
+			size++;
+		}
+		else
+		{
+			node->next = tail;
+			tail = node;
+			size++;
+		}
+	}
+
+	void display() {
+		if (head == NULL)
+		{
+			cout << "EMPTY LIST \n";
+			return;
+		}
+		Node* temp = tail;
+		while (temp!=NULL)
+		{
+			cout << temp->data << endl;
+			temp = temp->next;
+		}
+	}
+
+	void deleteAll() {
+		if (head==NULL)
+		{
+			cout << "LIST IS EMPTY!! \n";
+			return;
+		}
+		while (tail != NULL)
+		{
+			Node* temp = tail;
+			tail = temp->next;
+			temp->next = NULL;
+			delete temp;
+			size--;
+		}
+	}
+
+	int len() {
+		Node* temp = tail;
+		int couter = 0;
+		while (temp != NULL)
+		{
+			couter++;
+			temp = temp->next;
+		}
+		return couter;
+	}
+	//int Nexto is the number you have to search for and place valueToBeAdded next to it
+	void addToMid(const int& nextTo, const int& valueToBeAdded) {
+		if (head==NULL)
+		{
+			cout << "EMPTY LIST\n";
+			return;
+		}
+		Node* temp = tail;
+		bool found = false;
+		while (temp != NULL)
+		{
+			if (temp->data == nextTo)
+			{
+				found = true;
+				break;
+			}
+			temp = temp->next;
+		}
+		if (! found)
+		{
+			return;
+		}
+		Node* node = createNode();
+		node->data = valueToBeAdded;
+		node->next = temp->next;
+		temp->next = node;
+		size++;
+	}
+	int find(const int& val) {
+		Node* temp = tail;
+		while (temp != NULL)
+		{
+			if (temp->data==val)
+			{
+				return temp->data;
+			}
+			temp = temp->next;
+		}
+		return NULL;
+	}
+	//find the value in the list and delete it from the list
+	void deleteNode(const int& val) {
+		if (head == NULL)
+		{
+			return;
+		}
+		Node* temp = tail;
+		Node* del = tail->next;
+		bool found = false;
+		while (del != NULL)
+		{
+			if (del->data == val)
+			{
+				found = true;
+				break;
+			}
+			temp = temp->next;
+			del = del->next;
+		}
+		if (found)
+		{
+			cout << "VALUE FOUND!!\n";
+			temp->next = del->next;
+			del->next = NULL;
+			delete del;
+			size--;
+		}
+		else {
+			cout << "VALUE NOT FOUND!!\n";
+		}
+	}
+};
+
+
+
+int main()
+{
+    std::cout << "Hello World!\n";
+	SingleLinked_list* list = new SingleLinked_list();
+	for (int i = 0; i < 300; i++)
+	{
+		list->addToHead(i);
+		list->addToTail(i);
+	}
+	cout << "SIZE FIRST \n";
+	cout << list->len() << endl;
+	cout << "SIZE SECOND \n";
+	cout << list->getSize() << endl;
+	cout << "DISPALY BELOW?????????????????\n";
+	list->deleteNode(200);
+	list->deleteNode(1000);
+	list->deleteNode(50);
+	list->deleteNode(300);
+	cout << list->find(-1000000);
+
+	cout << "SIZE FIRST \n";
+	cout << list->len() << endl;
+	cout << "SIZE SECOND \n";
+	cout << list->getSize() << endl;
+
+	list->deleteAll();
+	cout << "END" << endl;
+	cout << list->getSize() << endl;
+}
