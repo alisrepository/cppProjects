@@ -1,0 +1,210 @@
+// doubleLinkedList.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+using namespace std;
+#include <iostream>
+
+struct Node
+{
+	int data;
+	Node* next;
+	Node* prev;
+};
+
+class DoubleLinkedList
+{
+public:
+	DoubleLinkedList() {
+		head = NULL;
+		tail = NULL;
+	}
+	~DoubleLinkedList() {
+		if (head == NULL)
+		{
+			cout << "EMPTY!!\n";
+			return;
+		}
+		while (tail != NULL)
+		{
+			Node* temp = tail;
+			tail = tail->next;
+			temp->next = NULL;
+			cout << "DELETED :>> ";
+			cout << temp->data << endl;
+			delete temp;
+			size--;
+		}
+		head = tail = NULL;
+	}
+
+	inline int getSize() { return size; }
+	inline Node* createNode() {
+		Node* node = new Node();
+		return node;
+	}
+
+	void addToHead(const int& num) {
+		Node* node = createNode();
+		node->data = num;
+		if (head == NULL)
+		{
+			head = tail = node;
+			node->prev = NULL;
+			node->next = NULL;
+			size++;
+		}
+		else
+		{
+			head->next = node;
+			node->prev = head;
+			head = node;
+			node->next = NULL;
+			size++;
+		}
+	}
+
+	void addToMid(const int& addNextTo, const int& val) {
+		if (head == NULL)
+		{
+			cout << "NO MID EMPTY!!\n";
+			return;
+		}
+		Node* temp = tail;
+		bool found = false;
+		while (temp != NULL)
+		{
+			if (temp->data == addNextTo)
+			{
+				found = true;
+				break;
+			}
+			temp = temp->next;
+		}
+		if (!found) {
+			cout << "Cant add nexto to this value, number does not exists!!\n";
+			return;
+		}
+		if (temp->next == NULL)
+		{
+			cout << "HEAD!!!!!!!!!!!!\n";
+			addToHead(val);
+			return;
+		}
+		Node* node = createNode();
+		node->data = val;
+		node->next = temp->next;
+		temp->next->prev = node;
+		node->prev = temp;
+		temp->next = node;
+		size++;
+	}
+
+	void addToTail(const int& val) {
+		Node* node = createNode();
+		node->data = val;
+		if (head == NULL)
+		{
+			head = tail = node;
+			node->next = node->prev = NULL;
+			size++;
+		}
+		else
+		{
+			tail->prev = node;
+			node->next = tail;
+			tail = node;
+			node->prev = NULL;
+			size++;
+		}
+	}
+
+	void displayAllH2T() {
+		if (head == NULL)
+		{
+			cout << "EMPTY" << endl;
+			return;
+		}
+		Node* temp = head;
+		while (temp!=NULL)
+		{
+			cout << temp->data << endl;
+			temp = temp->prev;
+		}
+	}
+
+	void displayAllT2H() {
+		if (head == NULL)
+		{
+			cout << "EMPTY" << endl;
+			return;
+		}
+		Node* temp = tail;
+		while (temp != NULL)
+		{
+			cout << temp->data << endl;
+			temp = temp->next;
+		}
+	}
+
+
+	void deleteAll() {
+		if (head == NULL)
+		{
+			cout << "EMPTY!!\n";
+			return;
+		}
+		while (tail != NULL)
+		{
+			Node* temp = tail;
+			tail = tail->next;
+			temp->next = NULL;
+			cout << "DELETED :>> ";
+			cout << temp->data << endl;
+			delete temp;
+			size--;
+		}
+		head = tail = NULL;
+	}
+
+private:
+	Node* head;
+	Node* tail;
+	int size = 0;
+};
+
+/*DoubleLinkedList::DoubleLinkedList()
+{
+}
+
+DoubleLinkedList::~DoubleLinkedList()
+{
+}*/
+
+int main()
+{
+
+	DoubleLinkedList* d = new DoubleLinkedList();
+	d->addToHead(5);
+	d->addToHead(3);
+	d->addToHead(4);
+
+	d->addToMid(50, 1000);
+	d->addToTail(100);
+	d->addToTail(200);
+
+	d->addToTail(300);
+	d->addToTail(400);
+	d->addToMid(400,5870);
+	d->addToMid(4, 66);
+
+	d->addToMid(66, 777777777);
+	d->displayAllH2T();
+	cout << "SIZE :>> ";
+	cout << d->getSize() << endl;
+	cout << "??????????????" << endl;
+	d->displayAllT2H();
+	d->deleteAll();
+    std::cout << "Hello World!\n";
+	cout << "SIZE :>> ";
+	cout << d->getSize() << endl;
+	//d->deleteAll();
+}
